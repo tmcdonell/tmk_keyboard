@@ -25,9 +25,9 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         GRV,    1,   2,   3,   4,   5,  FN3,
         TAB, QUOT,COMM, DOT,   P,   Y, LBRC,
-          UP,DOWN,  NO,LALT, FN1,
         LSFT,   A,   O,   E,   U,   I,
          FN6,SCLN,   Q,   J,   K,   X, SLSH,
+          UP,DOWN,  NO,LALT,FN10,
                                        DEL,  NO,
                                            PGUP,
                                  BSPC, FN5,PGDN,
@@ -36,7 +36,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              RBRC,F,   G,   C,   R,   L, EQL,
                   D,   H,   T,   N,   S,RSFT,
              BSLS,B,   M,   W,   V,   Z,MINS,
-                     FN2,RGUI,RALT,LEFT,RGHT,
+                    FN11,RGUI,RALT,LEFT,RGHT,
          GRV,TAB,
         HOME,
          END,ENT,SPC
@@ -81,16 +81,36 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                NO,PPLS,  P7,  P8,  P9,PAST,VOLU,
                   PMNS,  P4,  P5,  P6,PSLS,VOLD,
                NO,  NO,  P1,  P2,  P3,PENT,MUTE,
-                         P0,  NO,PDOT,  NO,  NO,
+                       TRNS,  NO,PDOT,  NO,  NO,
           NO,  NO,
           NO,
           NO,TRNS,TRNS
     ),
 
-    // HACK!! ~L1 on the right half should be a function that determines what to
-    //        do on the key up event depending on the state of the ~L1 on the
-    //        left half
-    KEYMAP(  // Layer2: transparent to layer one, but toggle back to zero
+/*
+    // templates to copy from
+
+    KEYMAP(  // LayerN: transparent on edges, all others are empty
+        // left hand
+        TRNS,NO,  NO,  NO,  NO,  NO,  NO,
+        TRNS,NO,  NO,  NO,  NO,  NO,  TRNS,
+        TRNS,NO,  NO,  NO,  NO,  NO,
+        TRNS,NO,  NO,  NO,  NO,  NO,  TRNS,
+        TRNS,TRNS,TRNS,TRNS,TRNS,
+                                      TRNS,TRNS,
+                                           TRNS,
+                                 TRNS,TRNS,TRNS,
+        // right hand
+             NO,  NO,  NO,  NO,  NO,  NO,  TRNS,
+             TRNS,NO,  NO,  NO,  NO,  NO,  TRNS,
+                  NO,  NO,  NO,  NO,  NO,  TRNS,
+             TRNS,NO,  NO,  NO,  NO,  NO,  TRNS,
+                       TRNS,TRNS,TRNS,TRNS,TRNS,
+        TRNS,TRNS,
+        TRNS,
+        TRNS,TRNS,TRNS
+    ),
+    KEYMAP(  // LayerN: fully transparent
         // left hand
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
         TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
@@ -105,11 +125,12 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
                   TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
              TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
-                        FN1,TRNS,TRNS,TRNS,TRNS,
+                       TRNS,TRNS,TRNS,TRNS,TRNS,
         TRNS,TRNS,
         TRNS,
         TRNS,TRNS,TRNS
     ),
+*/
 };
 
 /*
@@ -129,8 +150,8 @@ typedef enum {
  */
 static const uint16_t PROGMEM fn_actions[] = {
     [0] =   ACTION_FUNCTION(TEENSY_KEY),                    // FN0  - Teensy key
-    [1] =   ACTION_LAYER_MOMENTARY(1),                      // FN1  - Momentarily turn on layer 1 while holding
-    [2] =   ACTION_LAYER_MOMENTARY(2),                      // FN2  - Hacks for momentary layer switching
+    // [1] =   ACTION_LAYER_MOMENTARY(1),                      // FN1  - Momentarily turn on layer 1 while holding
+    // [2] =   ACTION_LAYER_MOMENTARY(2),                      // FN2  - Hacks for momentary layer switching
 
     [3] =   ACTION_MODS_KEY(MOD_LSFT, KC_9),                // FN3  - Left parenthesis
     [4] =   ACTION_MODS_KEY(MOD_LSFT, KC_0),                // FN4  - Right parenthesis
@@ -140,6 +161,9 @@ static const uint16_t PROGMEM fn_actions[] = {
     // [7] =   ACTION_FUNCTION_TAP(LSHIFT_LPAREN),             // FN7  - Left parenthesis with tap, else left shift
     // [8] =   ACTION_FUNCTION_TAP(RSHIFT_RPAREN),             // FN8  - Right parenthesis with tap, else right shift
     // [9] =   ACTION_FUNCTION(COLON_SEMICOLON),               // FN9  - Swap ':' and ';'
+
+    [10] =  ACTION_FUNCTION_TAP(LAYER1_LPAREN),             // FN10 - Momentarily turn on layer 1 while holding, ( on tap
+    [11] =  ACTION_FUNCTION_TAP(LAYER1_RPAREN),             // FN11 - Momentarily turn on layer 1 while holding, ) on tap
 };
 
 #if 0
@@ -209,10 +233,44 @@ void action_colon_semicolon(keyrecord_t *record)
 }
 #endif
 
+void action_layer1_tap_paren(keyrecord_t *record, uint8_t side)
 {
+    if (record->event.pressed) {
+        if (record->tap.count == 0 || record->tap.interrupted) {
+            layer_on(1);
+        }
     }
+    else {
+        if (record->tap.count > 0 && !record->tap.interrupted) {
+            uint8_t key;
+            uint8_t mod = 0;
 
+            if (side == 0) {
+                mod = MOD_BIT(KC_LSHIFT);
+                key = KC_9;
+            } else {
+                uint8_t layer = biton32(layer_state);
+                if (layer == 0) {
+                    mod = MOD_BIT(KC_LSHIFT);
+                    key = KC_0;
+                } else {  // layer 1
+                    key = KC_KP_0;
+                }
+            }
+
+            add_weak_mods(mod);
+            send_keyboard_report();
+            register_code(key);
+            unregister_code(key);
+            del_weak_mods(mod);
+            send_keyboard_report();
+            record->tap.count = 0;
+        } else {
+            layer_off(1);
+        }
     }
+}
+
 void action_teensy(void)
 {
     dprint("\n\n");
