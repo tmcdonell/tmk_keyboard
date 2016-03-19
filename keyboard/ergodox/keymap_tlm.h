@@ -68,11 +68,11 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     KEYMAP(
         // left hand
-        FN0 ,F1,  F2,  F3,  F4,  F5,  F11,
-          NO,  NO,  NO,  UP,  NO,  NO, NO,
-          NO,  NO,LEFT,DOWN,RGHT,  NO,
-          NO,  NO,  NO,  NO,  NO,  NO, NO,
-        MRWD,MPLY,MFFD,  NO,TRNS,
+         FN0,F1,  F2,  F3,  F4,  F5,  F11,
+        MFFD,  NO,  NO,  UP,  NO,  NO, NO,
+        MPLY,  NO,LEFT,DOWN,RGHT,  NO,
+        MRWD,  NO,  NO,  NO,  NO,  NO, NO,
+          NO,  NO,  NO,  NO,TRNS,
                                         NO,  NO,
                                              NO,
                                  TRNS,TRNS,  NO,
