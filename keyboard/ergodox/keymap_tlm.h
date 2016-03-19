@@ -25,16 +25,16 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         GRV,    1,   2,   3,   4,   5,  FN3,
         TAB, QUOT,COMM, DOT,   P,   Y, LBRC,
-         FN7,   A,   O,   E,   U,   I,
-         FN6, FN9,   Q,   J,   K,   X, SLSH,
           UP,DOWN,  NO,LALT, FN1,
+        LSFT,   A,   O,   E,   U,   I,
+         FN6,SCLN,   Q,   J,   K,   X, SLSH,
                                        DEL,  NO,
                                            PGUP,
                                  BSPC, FN5,PGDN,
         // right hand
              FN4, 6,   7,   8,   9,   0, ESC,
              RBRC,F,   G,   C,   R,   L, EQL,
-                  D,   H,   T,   N,   S, FN8,
+                  D,   H,   T,   N,   S,RSFT,
              BSLS,B,   M,   W,   V,   Z,MINS,
                      FN2,RGUI,RALT,LEFT,RGHT,
          GRV,TAB,
@@ -115,12 +115,14 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * id for user defined functions
  */
-enum function_id {
+typedef enum {
     TEENSY_KEY,
-    LSHIFT_LPAREN,
-    RSHIFT_RPAREN,
-    COLON_SEMICOLON,
-};
+    // LSHIFT_LPAREN,
+    // RSHIFT_RPAREN,
+    // COLON_SEMICOLON,
+    LAYER1_LPAREN,
+    LAYER1_RPAREN,
+} function_id;
 
 /*
  * Fn action definitons
@@ -135,11 +137,12 @@ static const uint16_t PROGMEM fn_actions[] = {
 
     [5] =   ACTION_MODS_TAP_KEY(MOD_LGUI, KC_ESCAPE),       // FN5  - Escape with tap left apple
     [6] =   ACTION_MODS_TAP_KEY(MOD_LCTL, KC_ESCAPE),       // FN6  - Escape with tap left control
-    [7] =   ACTION_FUNCTION_TAP(LSHIFT_LPAREN),             // FN7  - Left parenthesis with tap, else left shift
-    [8] =   ACTION_FUNCTION_TAP(RSHIFT_RPAREN),             // FN8  - Right parenthesis with tap, else right shift
-    [9] =   ACTION_FUNCTION(COLON_SEMICOLON),               // FN9  - Swap ':' and ';'
+    // [7] =   ACTION_FUNCTION_TAP(LSHIFT_LPAREN),             // FN7  - Left parenthesis with tap, else left shift
+    // [8] =   ACTION_FUNCTION_TAP(RSHIFT_RPAREN),             // FN8  - Right parenthesis with tap, else right shift
+    // [9] =   ACTION_FUNCTION(COLON_SEMICOLON),               // FN9  - Swap ':' and ';'
 };
 
+#if 0
 void action_shift_paren(keyrecord_t *record, uint8_t mod, uint8_t key)
 {
     if(record->event.pressed)
@@ -179,7 +182,8 @@ void action_shift_paren(keyrecord_t *record, uint8_t mod, uint8_t key)
     }
     dprint("\n");
 }
-
+#endif
+#if 0
 void action_colon_semicolon(keyrecord_t *record)
 {
     if (record->event.pressed) {
@@ -193,36 +197,58 @@ void action_colon_semicolon(keyrecord_t *record)
             add_mods(shifted);      // add shift
         } else {
             dprint("un-shifted");
-            add_mods(MOD_BIT(KC_LSHIFT));
+            add_weak_mods(MOD_BIT(KC_LSHIFT));
             add_key(KC_SCOLON);
             send_keyboard_report(); // send ':'
-            del_mods(MOD_BIT(KC_LSHIFT));
+            del_weak_mods(MOD_BIT(KC_LSHIFT));
         }
     } else {
         del_key(KC_SCOLON);
         send_keyboard_report();
     }
 }
+#endif
+
+{
+    }
+
+    }
+void action_teensy(void)
+{
+    dprint("\n\n");
+    dprint("Jumping to bootloader...\n");
+    clear_keyboard();
+    _delay_ms(100);
+    bootloader_jump();    // should not return
+}
 
 void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
-    if (id == TEENSY_KEY) {
-        clear_keyboard();
-        print("\n\nJumping to bootloader... ");
-        _delay_ms(250);
-        bootloader_jump(); // should not return
-    }
+    switch (id) {
+    case TEENSY_KEY:
+        action_teensy();
+        break;
 
-    else if (id == LSHIFT_LPAREN) {
+#if 0
+    case LSHIFT_LPAREN:
         action_shift_paren(record, MOD_BIT(KC_LSHIFT), KC_9);
-    }
+        break;
 
-    else if (id == RSHIFT_RPAREN) {
+    case RSHIFT_RPAREN:
         action_shift_paren(record, MOD_BIT(KC_RSHIFT), KC_0);
-    }
+        break;
 
-    else if (id == COLON_SEMICOLON) {
+    case COLON_SEMICOLON:
         action_colon_semicolon(record);
+        break;
+#endif
+    case LAYER1_LPAREN:
+        action_layer1_tap_paren(record, 0);
+        break;
+
+    case LAYER1_RPAREN:
+        action_layer1_tap_paren(record, 1);
+        break;
     }
 }
 
