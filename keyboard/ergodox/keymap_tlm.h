@@ -23,20 +23,20 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
     KEYMAP(
         // left hand
-        GRV,    1,   2,   3,   4,   5,  FN3,
+        GRV,    1,   2,   3,   4,   5,  FN5,
         TAB, QUOT,COMM, DOT,   P,   Y, LBRC,
         LSFT,   A,   O,   E,   U,   I,
-         FN6,SCLN,   Q,   J,   K,   X, SLSH,
-          UP,DOWN,  NO,LALT,FN10,
+         FN4,SCLN,   Q,   J,   K,   X, SLSH,
+          UP,DOWN,  NO,LALT, FN1,
                                        DEL,  NO,
                                            PGUP,
-                                 BSPC, FN5,PGDN,
+                                 BSPC, FN3,PGDN,
         // right hand
-             FN4, 6,   7,   8,   9,   0, ESC,
+             FN6, 6,   7,   8,   9,   0, ESC,
              RBRC,F,   G,   C,   R,   L, EQL,
                   D,   H,   T,   N,   S,RSFT,
              BSLS,B,   M,   W,   V,   Z,MINS,
-                    FN11,RGUI,RALT,LEFT,RGHT,
+                     FN2,RGUI,RALT,LEFT,RGHT,
          GRV,TAB,
         HOME,
          END,ENT,SPC
@@ -68,7 +68,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     KEYMAP(
         // left hand
-         FN0,F1,  F2,  F3,  F4,  F5,  F11,
+         FN0,  F1,  F2,  F3,  F4,  F5,  F11,
         MFFD,  NO,  NO,  UP,  NO,  NO, NO,
         MPLY,  NO,LEFT,DOWN,RGHT,  NO,
         MRWD,  NO,  NO,  NO,  NO,  NO, NO,
@@ -77,7 +77,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                              NO,
                                  TRNS,TRNS,  NO,
         // right hand
-             F12, F6,  F7,  F8,  F9,   F10,POWER,
+              F12,  F6,  F7,  F8,  F9, F10,POWER,
                NO,PPLS,  P7,  P8,  P9,PAST,VOLU,
                   PMNS,  P4,  P5,  P6,PSLS,VOLD,
                NO,  NO,  P1,  P2,  P3,PENT,MUTE,
@@ -150,20 +150,18 @@ typedef enum {
  */
 static const uint16_t PROGMEM fn_actions[] = {
     [0] =   ACTION_FUNCTION(TEENSY_KEY),                    // FN0  - Teensy key
-    // [1] =   ACTION_LAYER_MOMENTARY(1),                      // FN1  - Momentarily turn on layer 1 while holding
-    // [2] =   ACTION_LAYER_MOMENTARY(2),                      // FN2  - Hacks for momentary layer switching
+    [1] =   ACTION_FUNCTION_TAP(LAYER1_LPAREN),             // FN1  - Momentarily turn on layer 1 while holding, ( on tap
+    [2] =   ACTION_FUNCTION_TAP(LAYER1_RPAREN),             // FN2  - Momentarily turn on layer 1 while holding, ) on tap
 
-    [3] =   ACTION_MODS_KEY(MOD_LSFT, KC_9),                // FN3  - Left parenthesis
-    [4] =   ACTION_MODS_KEY(MOD_LSFT, KC_0),                // FN4  - Right parenthesis
+    [3] =   ACTION_MODS_TAP_KEY(MOD_LGUI, KC_ESCAPE),       // FN3  - Escape with tap left apple
+    [4] =   ACTION_MODS_TAP_KEY(MOD_LCTL, KC_ESCAPE),       // FN4  - Escape with tap left control
 
-    [5] =   ACTION_MODS_TAP_KEY(MOD_LGUI, KC_ESCAPE),       // FN5  - Escape with tap left apple
-    [6] =   ACTION_MODS_TAP_KEY(MOD_LCTL, KC_ESCAPE),       // FN6  - Escape with tap left control
+    [5] =   ACTION_MODS_KEY(MOD_LSFT, KC_9),                // FN5  - Left parenthesis
+    [6] =   ACTION_MODS_KEY(MOD_LSFT, KC_0),                // FN6  - Right parenthesis
+
     // [7] =   ACTION_FUNCTION_TAP(LSHIFT_LPAREN),             // FN7  - Left parenthesis with tap, else left shift
     // [8] =   ACTION_FUNCTION_TAP(RSHIFT_RPAREN),             // FN8  - Right parenthesis with tap, else right shift
     // [9] =   ACTION_FUNCTION(COLON_SEMICOLON),               // FN9  - Swap ':' and ';'
-
-    [10] =  ACTION_FUNCTION_TAP(LAYER1_LPAREN),             // FN10 - Momentarily turn on layer 1 while holding, ( on tap
-    [11] =  ACTION_FUNCTION_TAP(LAYER1_RPAREN),             // FN11 - Momentarily turn on layer 1 while holding, ) on tap
 };
 
 #if 0
