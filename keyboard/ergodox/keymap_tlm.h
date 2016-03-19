@@ -23,16 +23,16 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
     KEYMAP(
         // left hand
-        GRV,    1,   2,   3,   4,   5,  FN5,
-        TAB, QUOT,COMM, DOT,   P,   Y, LBRC,
-        LSFT,   A,   O,   E,   U,   I,
+         GRV,   1,   2,   3,   4,   5,  FN6,
+         TAB,QUOT,COMM, DOT,   P,   Y, LBRC,
+        LSFT,   A,   O, FN5,   U,   I,
          FN4,SCLN,   Q,   J,   K,   X, SLSH,
           UP,DOWN,  NO,LALT, FN1,
                                        DEL,  NO,
                                            PGUP,
                                  BSPC, FN3,PGDN,
         // right hand
-             FN6, 6,   7,   8,   9,   0, ESC,
+             FN7, 6,   7,   8,   9,   0, ESC,
              RBRC,F,   G,   C,   R,   L, EQL,
                   D,   H,   T,   N,   S,RSFT,
              BSLS,B,   M,   W,   V,   Z,MINS,
@@ -44,7 +44,6 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /*
      * Layer 1 : Function keys, inverted-T arrow cluster, numpad
-     *           Also duplicated to layer 2 due to behaviour of ACTION_LAYER_MOMENTARY
      *
      * ,--------------------------------------------------.           ,--------------------------------------------------.
      * | Teensy |  F1  |  F2  |  F3  |  F4  |  F5  |  F11 |           |  F12 |  F6  |  F7  |  F8  |  F9  | F10  | POWER  |
@@ -65,7 +64,6 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *                                 |      |      |      |       |      |      |      |
      *                                 `--------------------'       `--------------------'
      */
-
     KEYMAP(
         // left hand
          FN0,  F1,  F2,  F3,  F4,  F5,  F11,
@@ -82,6 +80,49 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                   PMNS,  P4,  P5,  P6,PSLS,VOLD,
                NO,  NO,  P1,  P2,  P3,PENT,MUTE,
                        TRNS,  NO,PDOT,  NO,  NO,
+          NO,  NO,
+          NO,
+          NO,TRNS,TRNS
+    ),
+
+    /*
+     * Layer 2 : Punctuation, momentarily switch to by holding 'e' on main layer
+     *
+     * ,--------------------------------------------------.           ,--------------------------------------------------.
+     * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+     * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+     * |        |      |      |      |      |      |      |           |      |      |  {   |   }  |  !   |  ?   |   +    |
+     * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+     * |        |      |      | ~L2  |      |      |------|           |------|      |  (   |   )  |  <   |  >   |   =    |
+     * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+     * |        |      |      |      |      |      |      |           |      |      |  [   |   ]  |  "   |  |   |   \    |
+     * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+     *   |      |      |      |      |      |                                       |      |      |      |      |      |
+     *   `----------------------------------'                                       `----------------------------------'
+     *                                        ,-------------.       ,-------------.
+     *                                        |      |      |       |      |      |
+     *                                 ,------|------|------|       |------+------+------.
+     *                                 |      |      |      |       |      |      |      |
+     *                                 | Trns | Trns |------|       |------| Trns | Trns |
+     *                                 |      |      |      |       |      |      |      |
+     *                                 `--------------------'       `--------------------'
+     */
+    KEYMAP(  // Layer2: punctuation keys
+        // left hand
+          NO,  NO,  NO,  NO,  NO,  NO,  NO,
+          NO,  NO,  NO,  NO,  NO,  NO,  NO,
+          NO,  NO,  NO, FN5,  NO,  NO,
+          NO,  NO,  NO,  NO,  NO,  NO,  NO,
+          NO,  NO,  NO,  NO,TRNS,
+                                        NO,  NO,
+                                             NO,
+                                 TRNS,TRNS,  NO,
+        // right hand
+               NO,  NO,  NO,  NO,  NO,  NO,  NO,
+               NO,  NO, FN8, FN9,FN12,FN13,PPLS,
+                    NO, FN6, FN7,FN10,FN11, EQL,
+               NO,  NO,LBRC,RBRC,FN15,FN14,BSLS,
+                         NO,  NO,  NO,  NO,  NO,
           NO,  NO,
           NO,
           NO,TRNS,TRNS
@@ -150,18 +191,27 @@ typedef enum {
  */
 static const uint16_t PROGMEM fn_actions[] = {
     [0] =   ACTION_FUNCTION(TEENSY_KEY),                    // FN0  - Teensy key
-    [1] =   ACTION_FUNCTION_TAP(LAYER1_LPAREN),             // FN1  - Momentarily turn on layer 1 while holding, ( on tap
-    [2] =   ACTION_FUNCTION_TAP(LAYER1_RPAREN),             // FN2  - Momentarily turn on layer 1 while holding, ) on tap
+    [1] =   ACTION_FUNCTION_TAP(LAYER1_LPAREN),             // FN1  - Momentarily switch to layer 1 while holding, ( on tap
+    [2] =   ACTION_FUNCTION_TAP(LAYER1_RPAREN),             // FN2  - Momentarily switch to layer 1 while holding, ) on tap
 
-    [3] =   ACTION_MODS_TAP_KEY(MOD_LGUI, KC_ESCAPE),       // FN3  - Escape with tap left apple
-    [4] =   ACTION_MODS_TAP_KEY(MOD_LCTL, KC_ESCAPE),       // FN4  - Escape with tap left control
+    [3] =   ACTION_MODS_TAP_KEY(MOD_LGUI, KC_ESCAPE),       // FN3  - Left Apple, Esc on tap
+    [4] =   ACTION_MODS_TAP_KEY(MOD_LCTL, KC_ESCAPE),       // FN4  - Left Control, Esc on tap
 
-    [5] =   ACTION_MODS_KEY(MOD_LSFT, KC_9),                // FN5  - Left parenthesis
-    [6] =   ACTION_MODS_KEY(MOD_LSFT, KC_0),                // FN6  - Right parenthesis
+    [5] =   ACTION_LAYER_TAP_KEY(2, KC_E),                  // FN5  - Momentarily switch to layer 2 while holding, A on tap
+    [6] =   ACTION_MODS_KEY(MOD_LSFT, KC_9),                // FN6  - (
+    [7] =   ACTION_MODS_KEY(MOD_LSFT, KC_0),                // FN7  - )
+    [8] =   ACTION_MODS_KEY(MOD_LSFT, KC_LBRACKET),         // FN8  - {
+    [9] =   ACTION_MODS_KEY(MOD_LSFT, KC_RBRACKET),         // FN9  - {
+    [10] =  ACTION_MODS_KEY(MOD_LSFT, KC_COMM),             // FN10 - <
+    [11] =  ACTION_MODS_KEY(MOD_LSFT, KC_DOT),              // FN11 - >
+    [12] =  ACTION_MODS_KEY(MOD_LSFT, KC_1),                // FN12 - !
+    [13] =  ACTION_MODS_KEY(MOD_LSFT, KC_SLASH),            // FN13 - ?
+    [14] =  ACTION_MODS_KEY(MOD_LSFT, KC_BSLASH),           // FN14 - |
+    [15] =  ACTION_MODS_KEY(MOD_LSFT, KC_QUOTE),            // FN15 - "
 
-    // [7] =   ACTION_FUNCTION_TAP(LSHIFT_LPAREN),             // FN7  - Left parenthesis with tap, else left shift
-    // [8] =   ACTION_FUNCTION_TAP(RSHIFT_RPAREN),             // FN8  - Right parenthesis with tap, else right shift
-    // [9] =   ACTION_FUNCTION(COLON_SEMICOLON),               // FN9  - Swap ':' and ';'
+    // [x] =   ACTION_FUNCTION_TAP(LSHIFT_LPAREN),             // FNx  - Left parenthesis with tap, else left shift
+    // [x] =   ACTION_FUNCTION_TAP(RSHIFT_RPAREN),             // FNx  - Right parenthesis with tap, else right shift
+    // [x] =   ACTION_FUNCTION(COLON_SEMICOLON),               // FNx  - Swap ':' and ';'
 };
 
 #if 0
