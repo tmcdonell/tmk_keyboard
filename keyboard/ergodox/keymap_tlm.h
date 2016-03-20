@@ -30,7 +30,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
           UP,DOWN,  NO,LALT, FN1,
                                        DEL,  NO,
                                            PGUP,
-                                 BSPC, FN3,PGDN,
+                                 FN17, FN3,PGDN,
         // right hand
              FN7, 6,   7,   8,   9,   0, ESC,
              RBRC,F,   G,   C,   R,   L, EQL,
@@ -184,6 +184,7 @@ typedef enum {
     // COLON_SEMICOLON,
     LAYER1_LPAREN,
     LAYER1_RPAREN,
+    SHIFT_DELETE,
 } function_id;
 
 /*
@@ -212,6 +213,7 @@ static const uint16_t PROGMEM fn_actions[] = {
     // [x] =   ACTION_FUNCTION_TAP(LSHIFT_LPAREN),             // FNx  - Left parenthesis with tap, else left shift
     // [x] =   ACTION_FUNCTION_TAP(RSHIFT_RPAREN),             // FNx  - Right parenthesis with tap, else right shift
     // [x] =   ACTION_FUNCTION(COLON_SEMICOLON),               // FNx  - Swap ':' and ';'
+    [17] =  ACTION_FUNCTION(SHIFT_DELETE),                  // FN17 - Shift+Delete = Forward delete
 };
 
 #if 0
@@ -280,6 +282,26 @@ void action_colon_semicolon(keyrecord_t *record)
     }
 }
 #endif
+void action_shift_delete(keyrecord_t *record)
+{
+    uint8_t shifted = get_mods() & (MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_RSHIFT));
+    uint8_t key;
+
+    if (shifted) {
+        // Remove the shift mod?
+        key = KC_DELETE;
+    } else {
+        key = KC_BSPACE;
+    }
+
+    if (record->event.pressed) {
+        add_key(key);
+    } else {
+        del_key(key);
+    }
+
+    send_keyboard_report();
+}
 
 void action_layer1_tap_paren(keyrecord_t *record, uint8_t side)
 {
@@ -348,6 +370,10 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
         action_colon_semicolon(record);
         break;
 #endif
+    case SHIFT_DELETE:
+        action_shift_delete(record);
+        break;
+
     case LAYER1_LPAREN:
         action_layer1_tap_paren(record, 0);
         break;
