@@ -25,8 +25,8 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
          GRV,   1,   2,   3,   4,   5,  FN6,
          TAB,QUOT,COMM, DOT,   P,   Y, LBRC,
-        LSFT,   A,   O, FN5,   U,   I,
          FN4,SCLN,   Q,   J,   K,   X, SLSH,
+        LSFT,   A,   O,   E, FN5,   I,
           UP,DOWN,  NO,LALT, FN1,
                                        DEL,  NO,
                                            PGUP,
@@ -93,7 +93,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
      * |        |      |      |      |      |      |      |           |      |      |  {   |   }  |  !   |  ?   |   +    |
      * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-     * |        |      |      | ~L2  |      |      |------|           |------|      |  (   |   )  |  <   |  >   |   =    |
+     * |        |      |      |      | ~L2  |      |------|           |------|  ;   |  (   |   )  |  <   |  >   |   =    |
      * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
      * |        |      |      |      |      |      |      |           |      |      |  [   |   ]  |  "   |  |   |   \    |
      * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
@@ -111,7 +111,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
           NO,  NO,  NO,  NO,  NO,  NO,  NO,
           NO,  NO,  NO,  NO,  NO,  NO,  NO,
-          NO,  NO,  NO, FN5,  NO,  NO,
+          NO,  NO,  NO,  NO, FN5,  NO,
           NO,  NO,  NO,  NO,  NO,  NO,  NO,
           NO,  NO,  NO,  NO,TRNS,
                                         NO,  NO,
@@ -120,7 +120,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // right hand
                NO,  NO,  NO,  NO,  NO,  NO,  NO,
                NO,  NO, FN8, FN9,FN12,FN13,PPLS,
-                    NO, FN6, FN7,FN10,FN11, EQL,
+                  SCLN, FN6, FN7,FN10,FN11, EQL,
                NO,  NO,LBRC,RBRC,FN15,FN14,BSLS,
                          NO,  NO,  NO,  NO,  NO,
           NO,  NO,
@@ -197,7 +197,7 @@ static const uint16_t PROGMEM fn_actions[] = {
     [3] =   ACTION_MODS_TAP_KEY(MOD_LGUI, KC_ESCAPE),       // FN3  - Left Apple, Esc on tap
     [4] =   ACTION_MODS_TAP_KEY(MOD_LCTL, KC_ESCAPE),       // FN4  - Left Control, Esc on tap
 
-    [5] =   ACTION_LAYER_TAP_KEY(2, KC_E),                  // FN5  - Momentarily switch to layer 2 while holding, E on tap
+    [5] =   ACTION_LAYER_TAP_KEY(2, KC_U),                  // FN5  - Momentarily switch to layer 2 while holding, U on tap
     [6] =   ACTION_MODS_KEY(MOD_LSFT, KC_9),                // FN6  - (
     [7] =   ACTION_MODS_KEY(MOD_LSFT, KC_0),                // FN7  - )
     [8] =   ACTION_MODS_KEY(MOD_LSFT, KC_LBRACKET),         // FN8  - {
