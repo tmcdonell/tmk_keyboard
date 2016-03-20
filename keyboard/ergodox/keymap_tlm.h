@@ -25,8 +25,8 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
          GRV,   1,   2,   3,   4,   5,  FN6,
          TAB,QUOT,COMM, DOT,   P,   Y, LBRC,
-         FN4,SCLN,   Q,   J,   K,   X, SLSH,
         LSFT,   A,   O,   E, FN5,   I,
+         FN4,FN16,   Q,   J,   K,   X, SLSH,
           UP,DOWN,  NO,LALT, FN1,
                                        DEL,  NO,
                                            PGUP,
@@ -181,7 +181,7 @@ typedef enum {
     TEENSY_KEY,
     // LSHIFT_LPAREN,
     // RSHIFT_RPAREN,
-    // COLON_SEMICOLON,
+    COLON_SEMICOLON,
     LAYER1_LPAREN,
     LAYER1_RPAREN,
     SHIFT_DELETE,
@@ -212,7 +212,7 @@ static const uint16_t PROGMEM fn_actions[] = {
 
     // [x] =   ACTION_FUNCTION_TAP(LSHIFT_LPAREN),             // FNx  - Left parenthesis with tap, else left shift
     // [x] =   ACTION_FUNCTION_TAP(RSHIFT_RPAREN),             // FNx  - Right parenthesis with tap, else right shift
-    // [x] =   ACTION_FUNCTION(COLON_SEMICOLON),               // FNx  - Swap ':' and ';'
+    [16] =  ACTION_FUNCTION(COLON_SEMICOLON),               // FN16 - Swap ':' and ';'
     [17] =  ACTION_FUNCTION(SHIFT_DELETE),                  // FN17 - Shift+Delete = Forward delete
 };
 
@@ -257,7 +257,7 @@ void action_shift_paren(keyrecord_t *record, uint8_t mod, uint8_t key)
     dprint("\n");
 }
 #endif
-#if 0
+
 void action_colon_semicolon(keyrecord_t *record)
 {
     if (record->event.pressed) {
@@ -265,23 +265,23 @@ void action_colon_semicolon(keyrecord_t *record)
 
         if (shifted) {
             dprint("shifted");
-            del_mods(shifted);      // remove shift
+            del_mods(shifted);                    // remove shift
             add_key(KC_SCOLON);
-            send_keyboard_report(); // send ';' without shift
-            add_mods(shifted);      // add shift
+            send_keyboard_report();               // send ';' (without shift)
+            add_mods(shifted);                    // restore shift state, but don't bother sending immediately
         } else {
             dprint("un-shifted");
             add_weak_mods(MOD_BIT(KC_LSHIFT));
             add_key(KC_SCOLON);
-            send_keyboard_report(); // send ':'
+            send_keyboard_report();               // send ':' (with shift)
             del_weak_mods(MOD_BIT(KC_LSHIFT));
         }
     } else {
-        del_key(KC_SCOLON);
-        send_keyboard_report();
+        del_key(KC_SCOLON);                       // slightly incorrect, since we will send the key-up...
+        send_keyboard_report();                   // ...event for the un-modded key (':' for ';' and vice versa)
     }
 }
-#endif
+
 void action_shift_delete(keyrecord_t *record)
 {
     uint8_t shifted = get_mods() & (MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_RSHIFT));
@@ -365,11 +365,11 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
     case RSHIFT_RPAREN:
         action_shift_paren(record, MOD_BIT(KC_RSHIFT), KC_0);
         break;
-
+#endif
     case COLON_SEMICOLON:
         action_colon_semicolon(record);
         break;
-#endif
+
     case SHIFT_DELETE:
         action_shift_delete(record);
         break;
