@@ -333,6 +333,13 @@ static bool command_common(uint8_t code)
         case KC_N:
             clear_keyboard(); //Prevents stuck keys.
             keyboard_nkro = !keyboard_nkro;
+
+            // Save new NKRO state into EEPROM
+            keymap_config_t kc;
+            kc.raw  = eeconfig_read_keymap();
+            kc.nkro = keyboard_nkro;
+            eeconfig_write_keymap(kc.raw);
+
             if (keyboard_nkro)
                 print("NKRO: enabled\n");
             else
