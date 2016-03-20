@@ -197,7 +197,7 @@ static const uint16_t PROGMEM fn_actions[] = {
     [3] =   ACTION_MODS_TAP_KEY(MOD_LGUI, KC_ESCAPE),       // FN3  - Left Apple, Esc on tap
     [4] =   ACTION_MODS_TAP_KEY(MOD_LCTL, KC_ESCAPE),       // FN4  - Left Control, Esc on tap
 
-    [5] =   ACTION_LAYER_TAP_KEY(2, KC_E),                  // FN5  - Momentarily switch to layer 2 while holding, A on tap
+    [5] =   ACTION_LAYER_TAP_KEY(2, KC_E),                  // FN5  - Momentarily switch to layer 2 while holding, E on tap
     [6] =   ACTION_MODS_KEY(MOD_LSFT, KC_9),                // FN6  - (
     [7] =   ACTION_MODS_KEY(MOD_LSFT, KC_0),                // FN7  - )
     [8] =   ACTION_MODS_KEY(MOD_LSFT, KC_LBRACKET),         // FN8  - {
