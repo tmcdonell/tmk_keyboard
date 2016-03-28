@@ -107,7 +107,7 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *                                 |      |      |      |       |      |      |      |
      *                                 `--------------------'       `--------------------'
      */
-    KEYMAP(  // Layer2: punctuation keys
+    KEYMAP(
         // left hand
           NO,  NO,  NO,  NO,  NO,  NO,  NO,
           NO,  NO,  NO,  NO,  NO,  NO,  NO,
@@ -182,8 +182,9 @@ typedef enum {
     // LSHIFT_LPAREN,
     // RSHIFT_RPAREN,
     COLON_SEMICOLON,
-    LAYER1_LPAREN,
-    LAYER1_RPAREN,
+    // LAYER1_LPAREN,
+    // LAYER1_RPAREN,
+    LAYER1_KP0,
     SHIFT_DELETE,
 } function_id;
 
@@ -192,8 +193,9 @@ typedef enum {
  */
 static const uint16_t PROGMEM fn_actions[] = {
     [0] =   ACTION_FUNCTION(TEENSY_KEY),                    // FN0  - Teensy key
-    [1] =   ACTION_FUNCTION_TAP(LAYER1_LPAREN),             // FN1  - Momentarily switch to layer 1 while holding, ( on tap
-    [2] =   ACTION_FUNCTION_TAP(LAYER1_RPAREN),             // FN2  - Momentarily switch to layer 1 while holding, ) on tap
+    [1] =   ACTION_LAYER_MOMENTARY(1),                      // FN1  - Momentarily switch to layer 1 while holding
+    [2] =   ACTION_FUNCTION_TAP(LAYER1_KP0),                // FN2  - Momentarily switch to layer 1 while holding, Keypad0 if on layer 1
+    // [x] =   ACTION_FUNCTION_TAP(LAYER1_LPAREN),             // FNx  - Momentarily switch to layer 1 while holding, ( on tap
 
     [3] =   ACTION_MODS_TAP_KEY(MOD_LGUI, KC_ESCAPE),       // FN3  - Left Apple, Esc on tap
     [4] =   ACTION_MODS_TAP_KEY(MOD_LCTL, KC_ESCAPE),       // FN4  - Left Control, Esc on tap
@@ -303,6 +305,7 @@ void action_shift_delete(keyrecord_t *record)
     send_keyboard_report();
 }
 
+#if 0
 void action_layer1_tap_paren(keyrecord_t *record, uint8_t side)
 {
     if (record->event.pressed) {
@@ -340,6 +343,29 @@ void action_layer1_tap_paren(keyrecord_t *record, uint8_t side)
         }
     }
 }
+#endif
+
+void action_layer1_kp0(keyrecord_t *record)
+{
+    if (record->event.pressed) {
+        if (record->tap.count == 0 || record->tap.interrupted) {
+            layer_on(1);
+        }
+    } else {
+        /*
+         * Key-up for a tap event sends Keypad0.
+         * Regular key-up ends the momentary switch to layer 1.
+         */
+        if (record->tap.count > 0 && !record->tap.interrupted && biton32(layer_state) == 1) {
+            register_code(KC_KP_0);
+            unregister_code(KC_KP_0);
+            send_keyboard_report();
+            record->tap.count = 0;
+        } else {
+            layer_off(1);
+        }
+    }
+}
 
 void action_teensy(void)
 {
@@ -350,7 +376,7 @@ void action_teensy(void)
     bootloader_jump();    // should not return
 }
 
-void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
+void action_function(keyrecord_t *record, function_id id, uint8_t opt)
 {
     switch (id) {
     case TEENSY_KEY:
@@ -374,12 +400,17 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt)
         action_shift_delete(record);
         break;
 
+#if 0
     case LAYER1_LPAREN:
         action_layer1_tap_paren(record, 0);
         break;
 
     case LAYER1_RPAREN:
         action_layer1_tap_paren(record, 1);
+        break;
+#endif
+    case LAYER1_KP0:
+        action_layer1_kp0(record);
         break;
     }
 }
