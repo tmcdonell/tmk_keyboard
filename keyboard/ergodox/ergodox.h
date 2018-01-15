@@ -63,54 +63,29 @@ extern bool ergodox_left_led_1;         // left top
 extern bool ergodox_left_led_2;         // left middle
 extern bool ergodox_left_led_3;         // left bottom
 
-inline void ergodox_board_led_on(void)      { DDRD |=  (1<<6); PORTD |=  (1<<6); }
-inline void ergodox_right_led_1_on(void)    { DDRB |=  (1<<5); PORTB |=  (1<<5); }
-inline void ergodox_right_led_2_on(void)    { DDRB |=  (1<<6); PORTB |=  (1<<6); }
-inline void ergodox_right_led_3_on(void)    { DDRB |=  (1<<7); PORTB |=  (1<<7); }
-inline void ergodox_left_led_1_on(void)     { ergodox_left_led_1 = 1; }
-inline void ergodox_left_led_2_on(void)     { ergodox_left_led_2 = 1; }
-inline void ergodox_left_led_3_on(void)     { ergodox_left_led_3 = 1; }
+extern void ergodox_board_led_on(void);
+extern void ergodox_right_led_1_on(void);
+extern void ergodox_right_led_2_on(void);
+extern void ergodox_right_led_3_on(void);
+extern void ergodox_left_led_1_on(void);
+extern void ergodox_left_led_2_on(void);
+extern void ergodox_left_led_3_on(void);
 
-inline void ergodox_board_led_off(void)     { DDRD &= ~(1<<6); PORTD &= ~(1<<6); }
-inline void ergodox_right_led_1_off(void)   { DDRB &= ~(1<<5); PORTB &= ~(1<<5); }
-inline void ergodox_right_led_2_off(void)   { DDRB &= ~(1<<6); PORTB &= ~(1<<6); }
-inline void ergodox_right_led_3_off(void)   { DDRB &= ~(1<<7); PORTB &= ~(1<<7); }
-inline void ergodox_left_led_1_off(void)    { ergodox_left_led_1 = 0; }
-inline void ergodox_left_led_2_off(void)    { ergodox_left_led_2 = 0; }
-inline void ergodox_left_led_3_off(void)    { ergodox_left_led_3 = 0; }
+extern void ergodox_board_led_off(void);
+extern void ergodox_right_led_1_off(void);
+extern void ergodox_right_led_2_off(void);
+extern void ergodox_right_led_3_off(void);
+extern void ergodox_left_led_1_off(void);
+extern void ergodox_left_led_2_off(void);
+extern void ergodox_left_led_3_off(void);
 
-inline void ergodox_led_all_on(void)
-{
-    ergodox_board_led_on();
-    ergodox_right_led_1_on();
-    ergodox_right_led_2_on();
-    ergodox_right_led_3_on();
-    ergodox_left_led_1_on();
-    ergodox_left_led_2_on();
-    ergodox_left_led_3_on();
-    ergodox_left_leds_update();
-}
+extern void ergodox_led_all_on(void);
 
-inline void ergodox_led_all_off(void)
-{
-    ergodox_board_led_off();
-    ergodox_right_led_1_off();
-    ergodox_right_led_2_off();
-    ergodox_right_led_3_off();
-    ergodox_left_led_1_off();
-    ergodox_left_led_2_off();
-    ergodox_left_led_3_off();
-    ergodox_left_leds_update();
-}
+extern void ergodox_led_all_off(void);
 
-inline void ergodox_right_led_1_set(uint8_t n)    { OCR1A = n; }
-inline void ergodox_right_led_2_set(uint8_t n)    { OCR1B = n; }
-inline void ergodox_right_led_3_set(uint8_t n)    { OCR1C = n; }
+extern void ergodox_right_led_1_set(uint8_t n);
+extern void ergodox_right_led_2_set(uint8_t n);
+extern void ergodox_right_led_3_set(uint8_t n);
 
-inline void ergodox_led_all_set(uint8_t n)
-{
-    ergodox_right_led_1_set(n);
-    ergodox_right_led_2_set(n);
-    ergodox_right_led_3_set(n);
-}
+extern void ergodox_led_all_set(uint8_t n);
 
