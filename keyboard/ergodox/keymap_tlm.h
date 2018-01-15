@@ -48,11 +48,11 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * ,--------------------------------------------------.           ,--------------------------------------------------.
      * | Teensy |  F1  |  F2  |  F3  |  F4  |  F5  |  F11 |           |  F12 |  F6  |  F7  |  F8  |  F9  | F10  | POWER  |
      * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-     * |  Prev  |      |      |  Up  |      |      |      |           |      |  +   | Kpd7 | Kpd8 | Kpd9 |  *   | Vol+   |
+     * |  Trns  |      |      |  Up  |      |      |      |           |      |  +   | Kpd7 | Kpd8 | Kpd9 |  *   | Vol+   |
      * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-     * |  Play  |      | Left | Down | Rght |      |------|           |------|  -   | Kpd4 | Kpd5 | Kpd6 |  /   | Vol-   |
+     * |  Trns  |      | Left | Down | Rght |      |------|           |------|  -   | Kpd4 | Kpd5 | Kpd6 |  /   | Vol-   |
      * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-     * |  Next  |      |      |      |      |      |      |           |      |      | Kpd1 | Kpd2 | Kpd3 | Entr | Mute   |
+     * |  Trns  |      |      |      |      |      |      |           |      |      | Kpd1 | Kpd2 | Kpd3 | Entr | Mute   |
      * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
      *   |      |      |      |      |      |                                       | Kp0  |      |  .   |      |      |
      *   `----------------------------------'                                       `----------------------------------'
@@ -67,9 +67,9 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KEYMAP(
         // left hand
          FN0,  F1,  F2,  F3,  F4,  F5,  F11,
-        MFFD,  NO,  NO,  UP,  NO,  NO, NO,
-        MPLY,  NO,LEFT,DOWN,RGHT,  NO,
-        MRWD,  NO,  NO,  NO,  NO,  NO, NO,
+        TRNS,  NO,  NO,  UP,  NO,  NO, NO,
+        TRNS,  NO,LEFT,DOWN,RGHT,  NO,
+        TRNS,  NO,  NO,  NO,  NO,  NO, NO,
           NO,  NO,  NO,  NO,TRNS,
                                         NO,  NO,
                                              NO,
@@ -89,13 +89,13 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * Layer 2 : Punctuation, momentarily switch to by holding 'e' on main layer
      *
      * ,--------------------------------------------------.           ,--------------------------------------------------.
-     * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+     * |        |      |      |      |      |      |      |           |      |      |  $   |   #  |  @   |      |   -    |
      * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-     * |        |      |      |      |      |      |      |           |      |      |  {   |   }  |  !   |  ?   |   +    |
+     * |  Trns  |      |      |      |      |      |      |           |      |      |  {   |   }  |  !   |  ?   |   +    |
      * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-     * | LShift |      |      |      | ~L2  |      |------|           |------|  ;   |  (   |   )  |  <   |  >   |   =    |
+     * |  Trns  |      |      |      | ~L2  |      |------|           |------|  ;   |  (   |   )  |  <   |  >   |   =    |
      * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-     * | LCtrl  |      |      |      |      |      |      |           |      |      |  [   |   ]  |  "   |  |   |   \    |
+     * |  Trns  |      |      |      |      |      |      |           |      |      |  [   |   ]  |  "   |  |   |   \    |
      * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
      *   |      |      |      |      |      |                                       |      |      |      |      |      |
      *   `----------------------------------'                                       `----------------------------------'
@@ -110,15 +110,15 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KEYMAP(
         // left hand
           NO,  NO,  NO,  NO,  NO,  NO,  NO,
-          NO,  NO,  NO,  NO,  NO,  NO,  NO,
-        LSFT,  NO,  NO,  NO, FN5,  NO,
-         FN4,  NO,  NO,  NO,  NO,  NO,  NO,
+        TRNS,  NO,  NO,  NO,  NO,  NO,  NO,
+        TRNS,  NO,  NO,  NO, FN5,  NO,
+        TRNS,  NO,  NO,  NO,  NO,  NO,  NO,
           NO,  NO,  NO,  NO,TRNS,
                                         NO,  NO,
                                              NO,
                                  TRNS,TRNS,  NO,
         // right hand
-               NO,  NO,  NO,  NO,  NO,  NO,  NO,
+               NO,  NO,FN20,FN19,FN18,  NO,MINS,
                NO,  NO, FN8, FN9,FN12,FN13,PPLS,
                   SCLN, FN6, FN7,FN10,FN11, EQL,
                NO,  NO,LBRC,RBRC,FN15,FN14,BSLS,
@@ -211,6 +211,9 @@ static const uint16_t PROGMEM fn_actions[] = {
     [13] =  ACTION_MODS_KEY(MOD_LSFT, KC_SLASH),            // FN13 - ?
     [14] =  ACTION_MODS_KEY(MOD_LSFT, KC_BSLASH),           // FN14 - |
     [15] =  ACTION_MODS_KEY(MOD_LSFT, KC_QUOTE),            // FN15 - "
+    [18] =  ACTION_MODS_KEY(MOD_LSFT, KC_2),                // FN18 - @
+    [19] =  ACTION_MODS_KEY(MOD_LSFT, KC_3),                // FN19 - #
+    [20] =  ACTION_MODS_KEY(MOD_LSFT, KC_4),                // FN20 - $
 
     // [x] =   ACTION_FUNCTION_TAP(LSHIFT_LPAREN),             // FNx  - Left parenthesis with tap, else left shift
     // [x] =   ACTION_FUNCTION_TAP(RSHIFT_RPAREN),             // FNx  - Right parenthesis with tap, else right shift
